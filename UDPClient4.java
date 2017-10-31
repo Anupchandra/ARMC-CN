@@ -14,9 +14,9 @@ public class UDPClient4
                 {
                         String server_address = "localhost";
                         int server_port = 1111;
-                        Scanner scanner = new Scanner(System.in);
+                        Scanner input = new Scanner(System.in);
                         System.out.println("Enter the message to be sent");
-                        String message = scanner.nextLine();
+                        String message = input.nextLine();
 
                         InetAddress address = InetAddress.getByName(server_address);
 

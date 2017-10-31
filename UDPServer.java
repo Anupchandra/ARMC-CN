@@ -25,6 +25,7 @@ public class UDPServer
                                 String message = new String(msgBuffer, 0, packet.getLength());
                                 System.out.println("UDPServer: Message received = " + message);
                                 packet.setLength(msgBuffer.length);
+                                System.exit(1);
                         }
                 }
                 catch (Exception e)
