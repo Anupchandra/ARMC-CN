@@ -1,38 +1,25 @@
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
 
-/**
- * UDP Client for sending message
- */
-public class UDPClient4
+class UDPClient4
 {
-        public static void main(String args[])
-        {
-                try
-                {
-                        String server_address = "localhost";
-                        int server_port = 1111;
-                        Scanner input = new Scanner(System.in);
-                        System.out.println("Enter the message to be sent");
-                        String message = input.nextLine();
-
-                        InetAddress address = InetAddress.getByName(server_address);
-
-                        // Create Datagram packet with the UDP Server Ipaddress/ Port and Message to be sent
-                        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.getBytes().length, address, server_port);
-
-                        // Create DatagramSocket socket and send the Message
-                        DatagramSocket socket = new DatagramSocket();
-                        socket.send(packet);
-                        System.out.println("UDPClient: Sent data to Server ; Message = " + message);
-                        socket.close();
-                }
-                catch (Exception e)
-                {
-                        e.printStackTrace();
-                        System.out.println("Error in sending the Data to UDP Server");
-                }
-        }
+   public static void main(String args[]) throws Exception
+   {
+      BufferedReader inFromUser =
+         new BufferedReader(new InputStreamReader(System.in));
+      DatagramSocket clientSocket = new DatagramSocket();
+      InetAddress IPAddress = InetAddress.getByName("localhost");
+      byte[] sendData = new byte[1024];
+      byte[] receiveData = new byte[1024];
+      System.out.println("Enter start to connect to Server");
+      String sentence = inFromUser.readLine();
+      sendData = sentence.getBytes();
+      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+      clientSocket.send(sendPacket);
+      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+      clientSocket.receive(receivePacket);
+      String modifiedSentence = new String(receivePacket.getData());
+      System.out.println("Message received from Server: " + modifiedSentence);
+      clientSocket.close();
+   }
 }

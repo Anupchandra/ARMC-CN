@@ -1,37 +1,32 @@
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 
-/**
- * UDP Server listening to receive data from UDP Clients
- */
-public class UDPServer
+class UDPServer
 {
-        public static void main(String args[])
-        {
-                int server_port = 1111;
-                System.out.println("UDP Server Listening in " + server_port);
-                try
-                {
-                        // DatagramSocket created and listening in Port 1111
-                        DatagramSocket socket = new DatagramSocket(server_port);
-                        byte[] msgBuffer = new byte[1024];
-
-                        // DatagramPacket for receiving the incoming data from UDP Client
-                        DatagramPacket packet = new DatagramPacket(msgBuffer, msgBuffer.length);
-
-                        while (true)
-                        {
-                                socket.receive(packet);
-                                String message = new String(msgBuffer, 0, packet.getLength());
-                                System.out.println("UDPServer: Message received = " + message);
-                                packet.setLength(msgBuffer.length);
-                                System.exit(1);
-                        }
-                }
-                catch (Exception e)
-                {
-                        e.printStackTrace();
-                        System.out.println("Error in getting the Data from UDP Client");
-                }
-        }
+   public static void main(String args[]) throws Exception
+      {
+         DatagramSocket serverSocket = new DatagramSocket(9876);
+         System.out.println("Server Started on Port 9876");
+            byte[] receiveData = new byte[1024];
+            byte[] sendData = new byte[1024];
+            while(true)
+               {
+                  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                  serverSocket.receive(receivePacket);
+                  receivePacket.getData();
+                  InetAddress IPAddress = receivePacket.getAddress();
+                  int port = receivePacket.getPort();
+                  System.out.println("Client Connected");
+                  Scanner input = new Scanner(System.in);
+                  System.out.println("Enter the message to be sent: ");
+                  String message = input.nextLine();
+                  sendData = message.getBytes();
+                  DatagramPacket sendPacket =
+                  new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                  serverSocket.send(sendPacket);
+                  System.exit(0);
+               }
+            
+      }
 }
